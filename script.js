@@ -38,17 +38,39 @@ function AddBookToLibrary(title, author, blurb, isAvailable) {
     let newBookStatus = document.createElement("h2");
     newBookStatusAction.appendChild(newBookStatus);
 
+    let newBookBorrow = document.createElement("button");
+    newBookBorrow.type = "button";
+    newBookBorrow.innerText = "Check Out";
+    newBookStatusAction.appendChild(newBookBorrow);
+
+    newBook.statusDisplay = newBookStatus;
+    newBook.borrowButton = newBookBorrow;
+
+    newBookBorrow.addEventListener("click", function() {
+        setBookAvailable(newBook, false)
+    });
+
     if (newBook.isAvailable) {
         newBookStatus.innerText = "Available";
         newBookStatus.classList.add("book-available");
+        newBookBorrow.disabled = false;
     } else {
         newBookStatus.innerText = "Unavailable";
         newBookStatus.classList.add("book-unavailable");
+        newBookBorrow.disabled = true;
     }
 
     newBookTile.appendChild(newBookStatusAction);
 
     BOOK_DISPLAY_AREA.appendChild(newBookTile);
+}
+
+function setBookAvailable(book, isAvailable) {
+    book.isAvailable = isAvailable;
+    book.borrowButton.disabled = !isAvailable;
+    book.statusDisplay.innerText = isAvailable ? "Available" : "Unavailable";
+    let statusDisplayClass = isAvailable ? "book-available" : "book-unavailable";
+    book.statusDisplay.classList.add(statusDisplayClass);
 }
 
 AddBookToLibrary(
