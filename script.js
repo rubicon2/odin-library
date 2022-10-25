@@ -20,49 +20,73 @@ function AddBookToLibraryByForm() {
 function AddBookToLibrary(title, author, blurb, isAvailable) {
     let newBook = new Book(title, author, blurb, isAvailable);
     myLibrary.push(newBook);
+    newBook.displayTile = createBookTile(newBook);
+    BOOK_DISPLAY_AREA.appendChild(newBook.displayTile);
+}
 
+function createBookTile(book) {
     let newBookTile = document.createElement("div");
     newBookTile.classList.add("book-tile");
+
     let newBookHeading = document.createElement("h2");
-    newBookHeading.innerText = newBook.title;
+    newBookHeading.innerText = book.title;
     newBookTile.appendChild(newBookHeading);
+
     let newBookAuthor = document.createElement("small");
-    newBookAuthor.innerText = newBook.author;
+    newBookAuthor.innerText = book.author;
     newBookTile.appendChild(newBookAuthor);
+
     let newBookBlurb = document.createElement("p");
-    newBookBlurb.innerText = newBook.blurb;
+    newBookBlurb.innerText = book.blurb;
     newBookTile.appendChild(newBookBlurb);
 
-    let newBookStatusAction = document.createElement("div");
-    newBookStatusAction.classList.add("book-status-actions");
+    let statusBar = createBookStatusBar(book);
+    newBookTile.appendChild(statusBar);
+
+    return newBookTile;
+}
+
+function createBookStatusBar(book) {
+    let statusBar = document.createElement("div");
+    statusBar.classList.add("book-status-actions");
+
     let newBookStatus = document.createElement("h2");
-    newBookStatusAction.appendChild(newBookStatus);
+    newBookStatus.classList.add("book-status");
+    statusBar.appendChild(newBookStatus);
+    book.statusDisplay = newBookStatus;
 
-    let newBookBorrow = document.createElement("button");
-    newBookBorrow.type = "button";
-    newBookBorrow.innerText = "Check Out";
-    newBookStatusAction.appendChild(newBookBorrow);
+    book.deleteButton = createBookActionButton("Remove");
+    statusBar.appendChild(book.deleteButton);
 
-    newBook.statusDisplay = newBookStatus;
-    newBook.borrowButton = newBookBorrow;
+    book.deleteButton.addEventListener("click", function() {
+        book.displayTile.remove();
+    })
 
-    newBookBorrow.addEventListener("click", function() {
-        setBookAvailable(newBook, false)
+    book.borrowButton = createBookActionButton("Borrow");
+    statusBar.appendChild(book.borrowButton);
+
+    book.borrowButton.addEventListener("click", function() {
+        setBookAvailable(book, false)
     });
 
-    if (newBook.isAvailable) {
+    if (book.isAvailable) {
         newBookStatus.innerText = "Available";
         newBookStatus.classList.add("book-available");
-        newBookBorrow.disabled = false;
+        book.borrowButton.disabled = false;
     } else {
         newBookStatus.innerText = "Unavailable";
         newBookStatus.classList.add("book-unavailable");
-        newBookBorrow.disabled = true;
+        book.borrowButton.disabled = true;
     }
 
-    newBookTile.appendChild(newBookStatusAction);
+    return statusBar;
+}
 
-    BOOK_DISPLAY_AREA.appendChild(newBookTile);
+function createBookActionButton(text) {
+    let newButton = document.createElement("button");
+    newButton.type = "button";
+    newButton.innerText = text;
+    return newButton;
 }
 
 function setBookAvailable(book, isAvailable) {

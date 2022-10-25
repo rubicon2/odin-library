@@ -109,12 +109,12 @@ details > form {
     margin-top: auto;
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 }
 
 .book-status {
-
+    margin-right: auto;
 }
 
 .book-available {
