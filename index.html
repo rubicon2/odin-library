@@ -10,14 +10,14 @@
         <header class="form-container">
             <details>
                 <summary>Add Book to Library</summary>
-                <form action="#" method="post" id="book-input-form">
+                <form action="#" method="post" id="book-input-form" novalidate>
                     <label for="title">Title</label>
-                    <input type="text" name="book-title" id="title">
+                    <input type="text" name="book-title" id="title" required>
                     <label for="author">Author</label>
-                    <input type="text" name="book-author" id="author">
+                    <input type="text" name="book-author" id="author" required>
                     <label for="blurb">Description</label>
-                    <input type="text" name="book-blurb" id="blurb">
-                    <button type="button" onclick="AddBookToLibraryByForm()">Add Book</button>
+                    <input type="text" name="book-blurb" id="blurb" required>
+                    <button type="submit">Add Book</button>
                 </form>
             </details>
         </header>

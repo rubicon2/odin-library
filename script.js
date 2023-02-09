@@ -1,6 +1,8 @@
 const BOOK_FORM = document.getElementById("book-input-form");
 const BOOK_DISPLAY_AREA = document.querySelector("main");
 
+const TITLE_INPUT = document.getElementById("title");
+
 class Library {
     constructor() {
         this.books = [];
@@ -104,9 +106,33 @@ class Book {
 
 const myLibrary = new Library();
 
-function AddBookToLibraryByForm() {
-    myLibrary.addBookToLibrary(BOOK_FORM.title.value, BOOK_FORM.author.value, BOOK_FORM.blurb.value, true, BOOK_DISPLAY_AREA);
-}
+BOOK_FORM.addEventListener('submit', (event) => {
+
+    event.preventDefault();
+
+    if (BOOK_FORM.title.validity.valueMissing) {
+        BOOK_FORM.title.setCustomValidity("Please enter a title!");
+    } else {
+        BOOK_FORM.title.setCustomValidity("");
+    }
+    
+    if (BOOK_FORM.author.validity.valueMissing) {
+        BOOK_FORM.author.setCustomValidity("Please enter an author.");
+    } else {
+        BOOK_FORM.author.setCustomValidity("");
+    } 
+
+    if (BOOK_FORM.blurb.validity.valueMissing) {
+        BOOK_FORM.blurb.setCustomValidity("We really need a blurb, so...");
+    } else {
+        BOOK_FORM.blurb.setCustomValidity("");
+    }
+    
+    if (BOOK_FORM.reportValidity())
+        myLibrary.addBookToLibrary(BOOK_FORM.title.value, BOOK_FORM.author.value, BOOK_FORM.blurb.value, true, BOOK_DISPLAY_AREA);
+});
+
+
 
 myLibrary.addBookToLibrary(
     "The Lord of The Rings: The Fellowship of The Ring",
